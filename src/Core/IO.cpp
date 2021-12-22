@@ -8,10 +8,10 @@
 	Licensed under the MIT License (To be found in repository root directory)
 */
 
-#include <DualSenseWindows/IO.h>
-#include <DualSenseWindows/DS_CRC32.h>
-#include <DualSenseWindows/DS5_Input.h>
-#include <DualSenseWindows/DS5_Output.h>
+#include <Core/IO.h>
+#include <Core/DS_CRC32.h>
+#include <Core/DS5_Input.h>
+#include <Core/DS5_Output.h>
 
 #define NOMINMAX
 

@@ -3,9 +3,11 @@
 #include <string>
 #include <sstream>
 
-#include <DualSenseWindows/IO.h>
-#include <DualSenseWindows/Device.h>
-#include <DualSenseWindows/Helpers.h>
+#include <Core/IO.h>
+#include <Core/Device.h>
+#include <Core/Helpers.h>
+
+#include <algorithm>
 
 typedef std::wstringstream wstrBuilder;
 
@@ -149,11 +151,11 @@ INT WINAPI wWinMain(HINSTANCE _In_ hInstance, HINSTANCE _In_opt_ hPrevInstance, 
 
 				// === Write Output ===
 				// Rumbel
-				lrmbl = max(lrmbl - 0x200 / btMul, 0);
-				rrmbl = max(rrmbl - 0x100 / btMul, 0);
+				lrmbl = std::max(lrmbl - 0x200 / btMul, 0);
+				rrmbl = std::max(rrmbl - 0x100 / btMul, 0);
 
-				outState.leftRumble = (lrmbl & 0xFF00) >> 8UL;
-				outState.rightRumble = (rrmbl & 0xFF00) >> 8UL;
+				// outState.leftRumble = (lrmbl & 0xFF00) >> 8UL;
+				// outState.rightRumble = (rrmbl & 0xFF00) >> 8UL;
 
 				// Lightbar
 				outState.lightbar = DS5W::color_R8G8B8_UCHAR_A32_FLOAT(255, 0, 0, intensity);
@@ -175,12 +177,7 @@ INT WINAPI wWinMain(HINSTANCE _In_ hInstance, HINSTANCE _In_opt_ hPrevInstance, 
 					outState.playerLeds.bitmask = 0;
 				}
 
-				// Set force
-				if (inState.rightTrigger == 0xFF) {
-					rType = DS5W::TriggerEffectType::ContinuousResitance;
-				} else if (inState.rightTrigger == 0x00) {
-					rType = DS5W::TriggerEffectType::NoResitance;
-				}
+				
 
 				// Mic led
 				if (inState.buttonsB & DS5W_ISTATE_BTN_B_MIC_BUTTON) {
@@ -193,12 +190,25 @@ INT WINAPI wWinMain(HINSTANCE _In_ hInstance, HINSTANCE _In_opt_ hPrevInstance, 
 				// Left trigger is clicky / section
 				outState.leftTriggerEffect.effectType = DS5W::TriggerEffectType::SectionResitance;
 				outState.leftTriggerEffect.Section.startPosition = 0x00;
-				outState.leftTriggerEffect.Section.endPosition = 0x60;
+				outState.leftTriggerEffect.Section.endPosition = 0x80;
 
 				// Right trigger is forcy
-				outState.rightTriggerEffect.effectType = rType;
-				outState.rightTriggerEffect.Continuous.force = 0xFF;
-				outState.rightTriggerEffect.Continuous.startPosition = 0x00;				
+				// Set force
+				
+				if (inState.rightTrigger == 0xFF) {
+					rType = DS5W::TriggerEffectType::ContinuousResitance;
+				}
+				else if (inState.rightTrigger == 0x00) {
+					rType = DS5W::TriggerEffectType::NoResitance;
+				}
+
+				outState.rightTriggerEffect.effectType = DS5W::TriggerEffectType::ContinuousResitance;
+				outState.rightTriggerEffect.Continuous.startPosition = 0;
+				outState.rightTriggerEffect.Continuous.force = inState.leftTrigger;
+				
+				outState.leftTriggerEffect.effectType = DS5W::TriggerEffectType::NoResitance;
+				outState.leftTriggerEffect.Continuous.startPosition = 0;
+				outState.leftTriggerEffect.Continuous.force = inState.rightTrigger;
 
 				DS5W::setDeviceOutputState(&con, &outState);
 			}

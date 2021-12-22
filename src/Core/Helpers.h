@@ -9,8 +9,8 @@
 */
 #pragma once
 
-#include <DualSenseWindows/DSW_Api.h>
-#include <DualSenseWindows/DS5State.h>
+#include <Core/DSW_Api.h>
+#include <Core/DS5State.h>
 
 namespace DS5W {
 	/// <summary>

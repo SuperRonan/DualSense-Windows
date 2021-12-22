@@ -9,9 +9,9 @@
 */
 #pragma once
 
-#include <DualSenseWindows/DSW_Api.h>
-#include <DualSenseWindows/Device.h>
-#include <DualSenseWindows/DS5State.h>
+#include <Core/DSW_Api.h>
+#include <Core/Device.h>
+#include <Core/DS5State.h>
 
 #include <Windows.h>
 

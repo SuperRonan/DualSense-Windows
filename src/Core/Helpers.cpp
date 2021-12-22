@@ -1,4 +1,4 @@
-#include <DualSenseWindows/Helpers.h>
+#include <Core/Helpers.h>
 
 DS5W_API DS5W::Color DS5W::color_R32G32B32_FLOAT(float r, float g, float b) {
 	return {(unsigned char)(255.0F * r), (unsigned char)(255.0F * g), (unsigned char)(255.0F * b)};
